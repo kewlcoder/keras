@@ -13,6 +13,8 @@ from keras.utils import to_categorical
 
 def normalize_conv(func):
     def wrapper(*args, **kwargs):
+        
+        # @AT : x - Image, w - kernel
         x = args[0]
         w = args[1]
         if x.ndim == 3:
@@ -106,6 +108,13 @@ def conv_transpose(x, w, output_shape, padding, data_format, dilation_rate=1):
 
     return conv(x, w, padding=padding, data_format=data_format)
 
+
+# @AT : '''
+An usual convolution has n filters. Each filter has m kernels, where m is the number of input channels and each kernel corresponds to an input channel. The 2d convolution is performed between each kernel and its corresponding channel and then they’re summed up across the channels to produce a single output channel. N filters will lead to n channels.
+But this requires m x kernel_size parameters for each filter. By contrast, depthwise separable convolutions perform a depthwise convolution followed by a pointwise (one by one) convolution.
+In a depthwise convolution, the kernels of each filter are applied separately to each channel and the outputs are concatenated. Then, the pointwise convolution is applied.
+As you can see, this factors the dimensions between the 2D and the depth. This greatly reduces the number of parameters that are required while still keeping efficiency and not destroying cross-channel features.
+'''
 
 conv1d = conv
 conv2d = conv
